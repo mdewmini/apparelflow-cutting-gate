@@ -1,0 +1,29 @@
+:root { color-scheme: light; --ink:#111827; --bg:#f3f4f6; --card:#ffffff; --line:#4b5563; --brand:#1d4ed8; }
+* { box-sizing: border-box; }
+body { margin:0; font-family: system-ui, sans-serif; background:var(--bg); color:var(--ink); }
+main { max-width: 1000px; margin: 0 auto; padding: 16px; }
+.card { background:var(--card); border:1px solid #d1d5db; border-radius:10px; padding:16px; margin-bottom:16px; }
+h1,h2,h3 { margin:0 0 12px; color:var(--ink); }
+label { display:block; font-weight:600; margin:10px 0 4px; color:var(--ink); }
+/* ZERO-TOLERANCE CONTRAST RULE: dark text on white in every state */
+input, select, textarea {
+  width:100%; padding:10px; font-size:16px; color:#111827 !important; background:#ffffff !important;
+  border:2px solid var(--line); border-radius:6px; -webkit-text-fill-color:#111827;
+}
+input::placeholder, textarea::placeholder { color:#4b5563; opacity:1; }
+input:focus, select:focus, textarea:focus { outline:3px solid #2563eb; border-color:#1e3a8a; }
+select option { color:#111827; background:#ffffff; }
+input[aria-invalid="true"], textarea[aria-invalid="true"] { border-color:#b91c1c; }
+.err { color:#991b1b; font-size:14px; margin-top:4px; font-weight:600; }
+.ok  { color:#14532d; font-weight:600; }
+button { padding:10px 16px; font-size:16px; border-radius:6px; border:0; cursor:pointer; background:var(--brand); color:#fff; font-weight:600; }
+button.secondary { background:#e5e7eb; color:#111827; border:1px solid #6b7280; }
+button.danger { background:#991b1b; }
+button:disabled { background:#9ca3af; color:#111827; cursor:not-allowed; }
+.row { display:flex; gap:12px; flex-wrap:wrap; align-items:center; }
+.grid { display:grid; grid-template-columns: repeat(auto-fit,minmax(200px,1fr)); gap:12px; }
+table { width:100%; border-collapse:collapse; display:block; overflow-x:auto; }
+th, td { text-align:left; padding:8px; border-bottom:1px solid #d1d5db; white-space:nowrap; }
+.badge { padding:3px 10px; border-radius:999px; font-weight:700; font-size:13px; color:#111827; }
+.GREEN,.VERIFIED { background:#bbf7d0; } .YELLOW,.PENDING_VERIFICATION { background:#fde68a; } .RED,.REJECTED { background:#fecaca; }
+.muted { color:#374151; font-size:14px; }
