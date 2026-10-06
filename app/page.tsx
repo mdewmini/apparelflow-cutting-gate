@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { api } from "@/lib/client";
 import Supervisor from "@/components/Supervisor";
 import Verifier from "@/components/Verifier";
+import Sewing from "@/components/Sewing";
 
 type Me = { id: number; role: string; fullName: string };
 const ROLE_LABEL: Record<string, string> = {
@@ -25,6 +26,7 @@ export default function Home() {
       </div>
       {me.role === "cutting_supervisor" && <Supervisor />}
       {me.role === "cutting_verifier" && <Verifier />}
+      {me.role === "sewing_supervisor" && <Sewing />}
     </main>
   );
 }
