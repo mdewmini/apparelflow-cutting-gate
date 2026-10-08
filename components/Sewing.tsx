@@ -16,6 +16,7 @@ export default function Sewing() {
     {q.map((o) => { const log = o.logs[0]; return (
       <div key={o.id} className="card"><h3>{o.orderNo} - {o.recipe.name} x {o.targetQty}</h3>
         <p className="muted">Verified by <b>{log?.verifier.fullName}</b> on {log && new Date(log.timestamp).toLocaleString()} | Fabric wastage: <b>{log?.wastagePct}%</b> (cap {o.recipe.wastageCap}%)</p>
+          {log?.approvalNote && <p><b>Verifier note:</b> {log.approvalNote}</p>}
         <table><thead><tr><th>Component</th><th>Expected</th><th>Actual</th><th>Flag</th></tr></thead><tbody>
           {o.items.map((i: any) => (<tr key={i.id}><td>{i.component.componentName}</td><td>{i.expectedQty}</td><td>{i.actualQty}</td>
             <td><span className={`badge ${i.status}`}>{i.status}</span></td></tr>))}

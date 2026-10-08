@@ -4,13 +4,14 @@ import { api, isInt, flag } from "@/lib/client";
 
 export default function Verifier() {
   const [orders, setOrders] = useState<any[]>([]); const [sel, setSel] = useState<any>(null);
-  const [counts, setCounts] = useState<Record<number, string>>({}); const [note, setNote] = useState("");
+  const [counts, setCounts] = useState<Record<number, string>>({});
+  const [note, setNote] = useState(""); const [approveNote, setApproveNote] = useState("");
   const [msg, setMsg] = useState(""); const [noteErr, setNoteErr] = useState("");
   const load = useCallback(async () => { const r = await api("/api/orders"); if (r.ok) setOrders(r.data); }, []);
   useEffect(() => { load(); }, [load]);
 
   function pick(o: any) {
-    setSel(o); setMsg(""); setNote(""); setNoteErr("");
+    setSel(o); setMsg(""); setNote(""); setApproveNote(""); setNoteErr("");
     setCounts(Object.fromEntries(o.items.map((i: any) => [i.componentId, i.actualQty === null ? "" : String(i.actualQty)])));
   }
   const rows = sel ? sel.items.map((i: any) => {
@@ -25,7 +26,7 @@ export default function Verifier() {
   }
   async function approve() {
     const s = await saveCounts(); if (!s.ok) return setMsg(s.data.error);
-    const r = await api(`/api/orders/${sel.id}/approve`, { method: "POST" });
+    const r = await api(`/api/orders/${sel.id}/approve`, { method: "POST", body: JSON.stringify({ note: approveNote }) });
     setMsg(r.ok ? `Verified. Fabric wastage ${r.data.wastagePct}%` : r.data.error);
     if (r.ok) { setSel(null); load(); }
   }
@@ -52,6 +53,8 @@ export default function Verifier() {
             {r.raw !== "" && !r.valid && <div className="err">Whole numbers only</div>}</td>
           <td>{r.flag ? <span className={`badge ${r.flag}`}>{r.flag}</span> : "-"}</td></tr>))}
       </tbody></table>
+      <label htmlFor="approveNote">Approval note for sewing (optional)</label>
+      <textarea id="approveNote" rows={2} maxLength={500} value={approveNote} onChange={(e) => setApproveNote(e.target.value)} />
       <label htmlFor="note">Rejection reason (required to reject)</label>
       <textarea id="note" rows={3} value={note} onChange={(e) => setNote(e.target.value)} aria-invalid={!!noteErr} />
       <div className="err">{noteErr}</div>

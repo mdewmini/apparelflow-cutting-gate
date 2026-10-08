@@ -82,6 +82,7 @@ model VerificationLog {
   verifierId    Int      @map("verifier_id")
   decision      String   // APPROVED | REJECTED
   rejectionNote String?  @map("rejection_note")
+  approvalNote  String?  @map("approval_note")
   wastagePct    Float    @map("wastage_pct")
   variances     Json
   timestamp     DateTime @default(now())
