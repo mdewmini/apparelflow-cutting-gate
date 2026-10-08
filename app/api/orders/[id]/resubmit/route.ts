@@ -2,7 +2,7 @@ import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { requireRole, parseId } from "@/lib/auth";
 
-const schema = z.object({ actualFabricYds: z.number().positive().max(1000000).optional() });
+const schema = z.object({ actualFabricYds: z.number().int().positive().max(1000000).optional() });
 
 // Supervisor re-cuts a REJECTED batch and sends it back to QC.
 export async function POST(req: Request, { params }: { params: { id: string } }) {

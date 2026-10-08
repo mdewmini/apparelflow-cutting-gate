@@ -20,7 +20,7 @@ export default function Supervisor() {
     if (!f.recipeId) er.recipeId = "Select a recipe";
     if (!isInt(f.qty) || Number(f.qty) < 1) er.qty = "Whole number of 1 or more (no decimals or negatives)";
     if (!f.roll.trim()) er.roll = "Fabric roll ID is required";
-    if (!isPosNum(f.yards)) er.yards = "Positive number of yards required";
+    if (!isInt(f.yards) || Number(f.yards) < 1) er.yards = "Whole number of yards, 1 or more (no decimals or negatives)";
     setErrs(er); if (Object.keys(er).length) return;
     const r = await api("/api/orders", { method: "POST", body: JSON.stringify({
       recipeId: Number(f.recipeId), targetQty: Number(f.qty),

@@ -57,8 +57,7 @@ See `prisma/schema.prisma` for the full definitions.
 - Expected components = target quantity x pieces per garment.
 - GREEN: actual equals expected. YELLOW: actual is above expected (batch may proceed). RED: actual is below expected (approval blocked).
 - Fabric wastage % = ((actual fabric - expected fabric) / expected fabric) x 100, where expected fabric = target quantity x standard yards.
-- Quantities and counts accept whole numbers only. Fabric yards accept positive decimals because fabric is measured in fractions of a yard.
-
+- Quantities, counts and fabric yards accept whole numbers only. Negatives, decimals, text and empty values are rejected on the client and on the server.
 ## Run locally
 
 ```bash

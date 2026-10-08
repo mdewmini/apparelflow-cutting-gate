@@ -1,12 +1,18 @@
+import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { requireRole, parseId } from "@/lib/auth";
 import { canApprove, wastagePct, variancesOf } from "@/lib/gatekeeper";
 
-export async function POST(_req: Request, { params }: { params: { id: string } }) {
+const bodySchema = z.object({ note: z.string().trim().max(500).optional() });
+
+export async function POST(req: Request, { params }: { params: { id: string } }) {
   const g = await requireRole("cutting_verifier");            // 401 / 403
   if (g.error) return g.error;
   const orderId = parseId(params.id);
   if (!orderId) return Response.json({ error: "Bad order id" }, { status: 400 });
+  const body = bodySchema.safeParse(await req.json().catch(() => ({})));
+  if (!body.success) return Response.json({ error: "Note must be 500 characters or fewer" }, { status: 400 });
+  const approvalNote = body.data.note || null;
 
   return prisma.$transaction(async (tx) => {
     const order = await tx.cuttingOrder.findUnique({
@@ -24,7 +30,6 @@ export async function POST(_req: Request, { params }: { params: { id: string } }
         { status: 422 });
 
     const pct = wastagePct(order.actualFabricYds, order.targetQty, order.recipe.stdFabricYards);
-    // Compare-and-set prevents double approval under concurrency.
     const moved = await tx.cuttingOrder.updateMany({
       where: { id: orderId, status: "PENDING_VERIFICATION" },
       data: { status: "VERIFIED" },
@@ -32,7 +37,7 @@ export async function POST(_req: Request, { params }: { params: { id: string } }
     if (moved.count !== 1) return Response.json({ error: "Order state changed" }, { status: 409 });
 
     await tx.verificationLog.create({
-      data: { orderId, verifierId: g.session.id, decision: "APPROVED",
+      data: { orderId, verifierId: g.session.id, decision: "APPROVED", approvalNote,
               wastagePct: pct, variances: variancesOf(order.items) },
     });
     return Response.json({ ok: true, status: "VERIFIED", wastagePct: pct });

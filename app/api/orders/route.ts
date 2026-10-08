@@ -21,7 +21,7 @@ const orderSchema = z.object({
   recipeId: z.number().int().positive(),
   targetQty: z.number().int().positive().max(100000),
   fabricRollId: z.string().trim().min(1).max(50),
-  actualFabricYds: z.number().positive().max(1000000),
+  actualFabricYds: z.number().int().positive().max(1000000),
 });
 
 export async function POST(req: Request) {
