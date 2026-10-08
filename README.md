@@ -3,7 +3,7 @@
 Software Engineering Intern practical challenge for Webtezza (Pvt) Ltd.
 Next.js 14 (App Router, TypeScript), Prisma, PostgreSQL (Neon), JWT cookie auth, Vitest.
 
-**Live URL:** https://YOUR-VERCEL-URL
+**Live URL:** https://apparelflow-cutting-gate-sigma.vercel.app
 **Repository:** https://github.com/mdewmini/apparelflow-cutting-gate
 
 ## Demo credentials
